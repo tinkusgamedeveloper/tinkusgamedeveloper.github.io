@@ -17,12 +17,14 @@
     }
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
     font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
-  header { padding: 56px 0 32px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--accent); }
+  header { padding: 56px 0 28px; }
   .logo {
     width: 56px; height: 56px; border-radius: 14px; background: var(--accent);
     color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 26px;
@@ -30,27 +32,49 @@
   }
   h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
   .tag { color: var(--muted); margin: 0; font-size: 1.1rem; }
-  h2 { font-size: 1.2rem; margin: 40px 0 16px; }
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-  .card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
-    padding: 20px; display: flex; flex-direction: column; gap: 8px;
+  .panel { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .panel p { margin: 0 0 8px; }
+  .panel p:last-child { margin-bottom: 0; }
+
+  /* quick jump list */
+  .jump { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); margin: 24px 0 8px; }
+  .jump a {
+    display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text);
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px;
   }
-  .card h3 { margin: 0; font-size: 1.08rem; }
-  .card p { margin: 0; color: var(--muted); font-size: .95rem; flex: 1; }
-  .meta { font-size: .8rem; color: var(--muted); font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+  .jump img { width: 44px; height: 44px; border-radius: 10px; flex: none; }
+  .jump span { font-weight: 600; font-size: .92rem; line-height: 1.3; }
+
+  /* game sections */
+  .game { margin: 40px 0; background: var(--card); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+  .banner { display: block; width: 100%; aspect-ratio: 1024 / 500; object-fit: cover; background: var(--line); }
+  .game-body { padding: 22px 22px 26px; }
+  .game-head { display: flex; gap: 16px; align-items: center; margin-bottom: 14px; }
+  .game-head img { width: 72px; height: 72px; border-radius: 16px; flex: none; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+  .game-head h2 { margin: 0 0 4px; font-size: 1.4rem; line-height: 1.25; }
+  .game-head p { margin: 0; color: var(--muted); }
   .chip {
-    align-self: flex-start; background: var(--chip); color: var(--accent);
-    font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 99px;
+    display: inline-block; background: var(--chip); color: var(--accent);
+    font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin: 0 6px 6px 0;
   }
-  .links { display: flex; gap: 14px; font-size: .9rem; margin-top: 4px; }
-  a { color: var(--accent); }
-  .about, .contact {
-    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+  .intro { margin: 0 0 16px; }
+  h3 { font-size: 1rem; margin: 20px 0 8px; }
+  ul.features { margin: 0; padding-left: 20px; }
+  ul.features li { margin: 4px 0; }
+  .shots { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0 10px; scroll-snap-type: x mandatory; }
+  .shots a { flex: none; scroll-snap-align: start; }
+  .shots img { display: block; border-radius: 10px; border: 1px solid var(--line); background: var(--line); }
+  .shots.land img { height: 200px; width: auto; aspect-ratio: 16 / 9; }
+  .shots.port img { height: 340px; width: auto; aspect-ratio: 9 / 16; }
+  .meta { margin-top: 16px; font-size: .85rem; color: var(--muted); }
+  .meta code { font-family: ui-monospace, Menlo, Consolas, monospace; word-break: break-all; }
+  .note { font-size: .82rem; color: var(--muted); margin-top: 12px; }
+  footer { color: var(--muted); font-size: .85rem; padding: 24px 0 48px; }
+  @media (max-width: 560px) {
+    .shots.land img { height: 150px; }
+    .shots.port img { height: 280px; }
+    .game-head img { width: 60px; height: 60px; }
   }
-  .about p, .contact p { margin: 0 0 8px; }
-  .about p:last-child, .contact p:last-child { margin-bottom: 0; }
-  footer { color: var(--muted); font-size: .85rem; padding: 40px 0 48px; }
 </style>
 </head>
 <body>
@@ -62,50 +86,167 @@
     <p class="tag">Fun, satirical casual games for Android.</p>
   </header>
 
-  <section class="about">
-    <p>Tinku's Games is an independent game studio making light-hearted, offline-friendly casual games for Android phones. Our games need no account or login and do not collect personal information.</p>
+  <section class="panel">
+    <p>Tinku's Games is an independent game studio making light-hearted casual games for Android phones. Our games need no account or login, and your progress stays on your phone.</p>
     <p>Our games are free to play and are supported by ads served through Google AdMob.</p>
   </section>
 
-  <h2>Our games</h2>
-  <div class="grid">
+  <nav class="jump" aria-label="Our games">
+    <a href="#tilchatta-chalo"><img src="https://lh3.googleusercontent.com/stetC2EUpnhp9ssh44cqirGPbFnN_u6h1GMk1umIwWvXH3lnXcAZo3Wmw2O7XGF86HZmw2LBKSZTnb8G4efn=s128" alt=""><span>Tilchatta Chalo: Dilli Darbar</span></a>
+    <a href="#air-traffic-controller-job"><img src="https://lh3.googleusercontent.com/17VGmWW_oFVRCnp9slFs1-NcxBI0SI2-y9VQWa07UK2aa5LTq8dUUy2DKFw7JQOJqQm5rwaIoU8RNBHoZ_jhkA=s128" alt=""><span>Air Traffic Controller Job</span></a>
+    <a href="#traffic-signal-operator"><img src="https://lh3.googleusercontent.com/hP__hM5ISpZCimTbE6YuvIDtWd5H-Bw34JZuZwe7K5sWgDV1pRg7Se0HktEJoOHZBKbdj__6ok0cpeDgkqWbGw=s128" alt=""><span>Traffic Signal Operator</span></a>
+    <a href="#chaat-chaska"><img src="https://lh3.googleusercontent.com/4uJ4ZXZlKtdzO0L_8dXWqjc6wJOBdq3qGAvfwTVO9NN-kM1I3ffGaNwFwf1mb_hESm0F3HN4OyMKBX86rvgH=s128" alt=""><span>Chaat Chaska: Street Food Rush</span></a>
+  </nav>
 
-    <article class="card">
-      <span class="chip">Android</span>
-      <h3>Tilchatta Chalo: Dilli Darbar</h3>
-      <p>A satirical casual game set in Dilli.</p>
-      <div class="meta">com.tinkusgames.tilchattachalo</div>
-      <div class="links"><a href="tilchatta-chalo/privacy.html">Privacy policy</a></div>
-    </article>
+  <!-- ============ Tilchatta Chalo ============ -->
+  <article class="game" id="tilchatta-chalo">
+    <img class="banner" loading="lazy" src="https://lh3.googleusercontent.com/8Tsm_96E2GQUN5QbS1jpETNs3QlGmmHJehTXx5AxfC0jc8ks6adFco8W75YjqMQS8hyT6dQcUgaU8WR5jJQQrQ=w1024" alt="Tilchatta Chalo: Dilli Darbar feature graphic">
+    <div class="game-body">
+      <div class="game-head">
+        <img src="https://lh3.googleusercontent.com/stetC2EUpnhp9ssh44cqirGPbFnN_u6h1GMk1umIwWvXH3lnXcAZo3Wmw2O7XGF86HZmw2LBKSZTnb8G4efn=s256" alt="Tilchatta Chalo icon">
+        <div>
+          <h2>Tilchatta Chalo: Dilli Darbar</h2>
+          <p>Lead a cockroach swarm through comic Delhi. Grow, gherao, swallow rival parties!</p>
+        </div>
+      </div>
+      <span class="chip">Android</span><span class="chip">Swarm / Arcade</span><span class="chip">Hindi &amp; English</span><span class="chip">Plays offline</span>
+      <p class="intro">A funny, fast swarm game set on a comic map of Delhi. Start as one small cockroach, pick up every loose tilchatta in the city and grow into the biggest swarm in Dilli.</p>
+      <h3>Features</h3>
+      <ul class="features">
+        <li>Grow your swarm by recruiting loose cockroaches and eating samosas, momos, jalebi, golgappe, paratha and chole bhature.</li>
+        <li>Eat or be eaten: bigger swarms steal smaller ones' cockroaches. Touch a rival leader to swallow the whole party.</li>
+        <li>Play as one of 7 opposition parties, or switch sides and play as the Sarkar.</li>
+        <li>Gherao the police, and dodge lathi charges, tear gas and the water cannon.</li>
+        <li>Gathbandhan: team up with another party for 30 seconds.</li>
+        <li>A comic Delhi: India Gate, Connaught Place, Jantar Mantar, Chandni Chowk, JNU, Mukherjee Nagar, the Yamuna and Kooda Pahad. Ride the metro and dodge cows and potholes.</li>
+        <li>Breaking news events like paper leaks, AQI 999 smog, internet shutdowns and free bhandaras shake up every game.</li>
+        <li>Daily challenges with streaks, 20 achievements, Chanda coins, skins and slogan packs.</li>
+        <li>Share your score card on WhatsApp and Instagram.</li>
+        <li>Endless mode: how big can you get?</li>
+      </ul>
+      <h3>Screenshots</h3>
+      <div class="shots land">
+        <a href="https://lh3.googleusercontent.com/sAZYSU-REhe_UYju1-0fQ3eqllBuakvXw89bLnx1FZVhiNCXE54b-qZb-zrU-bL6vZ1sUxEO_llFi7CO_nqMeg=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/sAZYSU-REhe_UYju1-0fQ3eqllBuakvXw89bLnx1FZVhiNCXE54b-qZb-zrU-bL6vZ1sUxEO_llFi7CO_nqMeg=w720" alt="Tilchatta Chalo screenshot 1"></a>
+        <a href="https://lh3.googleusercontent.com/wT4QtlsFsOh8PZOKnTXsMaKbyhyno3JvN1hezsHpYf1HgsEFFE1ltem0zoDSVe6CA-utGmyouFlTXnmu9CXE=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/wT4QtlsFsOh8PZOKnTXsMaKbyhyno3JvN1hezsHpYf1HgsEFFE1ltem0zoDSVe6CA-utGmyouFlTXnmu9CXE=w720" alt="Tilchatta Chalo screenshot 2"></a>
+        <a href="https://lh3.googleusercontent.com/WLSVmL-WmqTdpOuDtUZBzG3MOhEJkWOLGYS6n7EPLrePxnD5jZi9Udb9K3W98yroB901RM6tfAGWZQgsfUUYHA=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/WLSVmL-WmqTdpOuDtUZBzG3MOhEJkWOLGYS6n7EPLrePxnD5jZi9Udb9K3W98yroB901RM6tfAGWZQgsfUUYHA=w720" alt="Tilchatta Chalo screenshot 3"></a>
+        <a href="https://lh3.googleusercontent.com/VjVrSTr0fva7-Y2UomIKo943sBljjIxDjljESTdFKF1FoieHaTZogVAS0qzDU15ej-QpDy2dxbU9a42QH7O3dw=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/VjVrSTr0fva7-Y2UomIKo943sBljjIxDjljESTdFKF1FoieHaTZogVAS0qzDU15ej-QpDy2dxbU9a42QH7O3dw=w720" alt="Tilchatta Chalo screenshot 4"></a>
+        <a href="https://lh3.googleusercontent.com/mvzqbr9-HoFU9xXwISQCaO0jUDR6wKWDVp8VXz49-LNXDMRSYeWD4kf5Kx05PxgNCrpw35zB1PviwrXY0ve1=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/mvzqbr9-HoFU9xXwISQCaO0jUDR6wKWDVp8VXz49-LNXDMRSYeWD4kf5Kx05PxgNCrpw35zB1PviwrXY0ve1=w720" alt="Tilchatta Chalo screenshot 5"></a>
+      </div>
+      <p class="note">Political satire. All characters are fictional cockroaches. Party references are parody and are not endorsed by, or affiliated with, any political party, government body or police force.</p>
+      <div class="meta">App ID: <code>com.tinkusgames.tilchattachalo</code> &middot; <a href="tilchatta-chalo/privacy.html">Privacy policy</a></div>
+    </div>
+  </article>
 
-    <article class="card">
-      <span class="chip">Android</span>
-      <h3>Air Traffic Controller Job</h3>
-      <p>Run a busy airport tower.</p>
-      <div class="meta">com.tinkusgames.airtrafficcontrollerjob</div>
-      <div class="links"><a href="air-traffic-controller-job/privacy.html">Privacy policy</a></div>
-    </article>
+  <!-- ============ Air Traffic Controller Job ============ -->
+  <article class="game" id="air-traffic-controller-job">
+    <img class="banner" loading="lazy" src="https://lh3.googleusercontent.com/BfhxrQ-PCapmMOuJXVRX0KLwMkjjxPSr-2SEbsgXVoTSw7E-zyGbF4hGqbJxIamUkINzAJhmNMfN5ilY8yc-0g=w1024" alt="Air Traffic Controller Job feature graphic">
+    <div class="game-body">
+      <div class="game-head">
+        <img src="https://lh3.googleusercontent.com/17VGmWW_oFVRCnp9slFs1-NcxBI0SI2-y9VQWa07UK2aa5LTq8dUUy2DKFw7JQOJqQm5rwaIoU8RNBHoZ_jhkA=s256" alt="Air Traffic Controller Job icon">
+        <div>
+          <h2>Air Traffic Controller Job</h2>
+          <p>Run a busy airport tower: land, launch and keep every plane safely apart.</p>
+        </div>
+      </div>
+      <span class="chip">Android</span><span class="chip">Simulation / Puzzle</span><span class="chip">No login</span>
+      <p class="intro">Take the job nobody else can handle: you are the air traffic controller. Planes call in from every direction. Arrivals need a runway, departures need a gap, and one wrong call and two aircraft get far too close.</p>
+      <h3>Features</h3>
+      <ul class="features">
+        <li>Tap a plane and clear it to land, or simply drag it onto a runway.</li>
+        <li>Send departures to the runway, hold them short, then clear them for takeoff.</li>
+        <li>A career across four airports: Pinewood Regional, Harbor City, Meridian Hub and Summit Valley. Earn stars to unlock the next one.</li>
+        <li>Every shift is different: shifting wind, rain, fog, thunderstorms, emergencies and runway closures.</li>
+        <li>Rush hour at midday, and a sky that turns from dawn to night.</li>
+        <li>Grow your airport with an upgrade after each day: parking stands, faster ground crew, high-speed exits, conflict alerts and more.</li>
+        <li>A living airport with jet bridges, fuel trucks, baggage carts, boats and runway lights. Switch to a classic radar scope with one tap.</li>
+        <li>Made for phones: pinch to zoom, double-tap to see the whole airspace.</li>
+      </ul>
+      <h3>Screenshots</h3>
+      <div class="shots land">
+        <a href="https://lh3.googleusercontent.com/E6SYh1xQ7vzgCfBZjFxLE7c2q9VkfnMkjGpCPyJldnXrRaPpqSpyF5vlnmAUs7Xmv-33R5pSh8JuGgChHB3_=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/E6SYh1xQ7vzgCfBZjFxLE7c2q9VkfnMkjGpCPyJldnXrRaPpqSpyF5vlnmAUs7Xmv-33R5pSh8JuGgChHB3_=w720" alt="Air Traffic Controller Job screenshot 1"></a>
+        <a href="https://lh3.googleusercontent.com/scbueCI5SKB2P4C067jqOsRp9MFmXACgF2y-5hTB9ELOSwwywaQuIYfkYLVrl25hpLrRloM-kCQaIdr645QDbIw=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/scbueCI5SKB2P4C067jqOsRp9MFmXACgF2y-5hTB9ELOSwwywaQuIYfkYLVrl25hpLrRloM-kCQaIdr645QDbIw=w720" alt="Air Traffic Controller Job screenshot 2"></a>
+        <a href="https://lh3.googleusercontent.com/jdyoFrQGNJKcfBJWFeEXACLlxhw32os6r4TzMTG8GUpGrOy-sAMrnRaErqdoUFEfUZmfmJkukAeNvcTEvTZC9_c=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/jdyoFrQGNJKcfBJWFeEXACLlxhw32os6r4TzMTG8GUpGrOy-sAMrnRaErqdoUFEfUZmfmJkukAeNvcTEvTZC9_c=w720" alt="Air Traffic Controller Job screenshot 3"></a>
+        <a href="https://lh3.googleusercontent.com/3thU8lc0YLECKOo1fTRB2_pYWSf26gRk1KEnTv-Cm_yVY7_O8sbW9NZ8fPkI2uCIW2h3vIXrIfTWTmdj6ZTeEAY=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/3thU8lc0YLECKOo1fTRB2_pYWSf26gRk1KEnTv-Cm_yVY7_O8sbW9NZ8fPkI2uCIW2h3vIXrIfTWTmdj6ZTeEAY=w720" alt="Air Traffic Controller Job screenshot 4"></a>
+        <a href="https://lh3.googleusercontent.com/sGfcOhkt481OQJrFvR83HXxSnWVlE8byfKaeJ73vWaru5hWP6MkmeKyi6Qa-dz5NNLpHVXu5cxxA-68fiC9hPUQ=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/sGfcOhkt481OQJrFvR83HXxSnWVlE8byfKaeJ73vWaru5hWP6MkmeKyi6Qa-dz5NNLpHVXu5cxxA-68fiC9hPUQ=w720" alt="Air Traffic Controller Job screenshot 5"></a>
+      </div>
+      <div class="meta">App ID: <code>com.tinkusgames.airtrafficcontrollerjob</code> &middot; <a href="air-traffic-controller-job/privacy.html">Privacy policy</a></div>
+    </div>
+  </article>
 
-    <article class="card">
-      <span class="chip">Android</span>
-      <h3>Traffic Signal Operator</h3>
-      <p>Run the traffic lights of a busy little town.</p>
-      <div class="meta">com.tinkusgames.trafficsignaloperator</div>
-      <div class="links"><a href="traffic-signal-operator/privacy.html">Privacy policy</a></div>
-    </article>
+  <!-- ============ Traffic Signal Operator ============ -->
+  <article class="game" id="traffic-signal-operator">
+    <img class="banner" loading="lazy" src="https://lh3.googleusercontent.com/BL-HU1BO_4dFT2rUN7ES-v1asxcOUsm6A3GXKGmugiCLjL-Ebsc-6wXPigos5zFIA15QLw-IyiF1MuHypmTNTw=w1024" alt="Traffic Signal Operator feature graphic">
+    <div class="game-body">
+      <div class="game-head">
+        <img src="https://lh3.googleusercontent.com/hP__hM5ISpZCimTbE6YuvIDtWd5H-Bw34JZuZwe7K5sWgDV1pRg7Se0HktEJoOHZBKbdj__6ok0cpeDgkqWbGw=s256" alt="Traffic Signal Operator icon">
+        <div>
+          <h2>Traffic Signal Operator</h2>
+          <p>Run the town's traffic lights. 22 levels of curves, flyovers and bridges.</p>
+        </div>
+      </div>
+      <span class="chip">Android</span><span class="chip">Puzzle / Simulation</span><span class="chip">Plays offline</span>
+      <p class="intro">Take charge of the traffic lights in a busy little town. Tap a signal to switch it, swap a whole junction safely, or link several signals so they change together. Keep the cars moving, and don't keep anyone waiting too long.</p>
+      <h3>Features</h3>
+      <ul class="features">
+        <li>22 levels with crossroads, T-junctions, curves, flyovers, rivers and bridges.</li>
+        <li>Cars that turn, signal, give way and lose patience.</li>
+        <li>Ambulances that must never be held up.</li>
+        <li>Buses at their bays and people waiting to cross.</li>
+        <li>Protected left-turn arrows, roadworks, rain and night.</li>
+        <li>Linked signal groups with automatic timers.</li>
+        <li>Star ratings, an endless mode and a new city every day.</li>
+        <li>Speed time up to 2&times; or 3&times;.</li>
+        <li>Plays offline in landscape.</li>
+      </ul>
+      <h3>Screenshots</h3>
+      <div class="shots land">
+        <a href="https://lh3.googleusercontent.com/3PS9WvrthvEW-U7iNSp6Io4YgK73E81x7K7o2G9QUgjfUCDDSNwqmkuALvlt9VNBTk0EJ0ciDUvcS9Q2vA-SOgc=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/3PS9WvrthvEW-U7iNSp6Io4YgK73E81x7K7o2G9QUgjfUCDDSNwqmkuALvlt9VNBTk0EJ0ciDUvcS9Q2vA-SOgc=w720" alt="Traffic Signal Operator screenshot 1"></a>
+        <a href="https://lh3.googleusercontent.com/moPR6XNFOoVRXmN6fb-y_I5oqiHv6gbB8qVkHNc2kap3My25CBQCk9q6K-tcjPwwPfetZIBEjwEtW312Qw0Gsvk=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/moPR6XNFOoVRXmN6fb-y_I5oqiHv6gbB8qVkHNc2kap3My25CBQCk9q6K-tcjPwwPfetZIBEjwEtW312Qw0Gsvk=w720" alt="Traffic Signal Operator screenshot 2"></a>
+        <a href="https://lh3.googleusercontent.com/VtO_gDEz6swylZsHpb8nVG61Deagxkc7_vJETkHTwfkl5Bsch_y3nfmqctxVOzQ-It-i-Ie-n08OdENZuIzS6YU=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/VtO_gDEz6swylZsHpb8nVG61Deagxkc7_vJETkHTwfkl5Bsch_y3nfmqctxVOzQ-It-i-Ie-n08OdENZuIzS6YU=w720" alt="Traffic Signal Operator screenshot 3"></a>
+        <a href="https://lh3.googleusercontent.com/IwSzNy5rk8fhBYYAG2osspVfMIfuUbLvyiS8R9oV8MD_JLVzQoYg7nP22E1rSxYrjdv1DbrygHJE0DMTJJBSZw=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/IwSzNy5rk8fhBYYAG2osspVfMIfuUbLvyiS8R9oV8MD_JLVzQoYg7nP22E1rSxYrjdv1DbrygHJE0DMTJJBSZw=w720" alt="Traffic Signal Operator screenshot 4"></a>
+        <a href="https://lh3.googleusercontent.com/_3yKAm71bUgQbDxtENovT_ZCv5L14l2M0a2QZwkmUvMMqPJLpoEr8xt6j_jm0dfw9hC8yicSvCy1cuVxcCRH8pc=w1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/_3yKAm71bUgQbDxtENovT_ZCv5L14l2M0a2QZwkmUvMMqPJLpoEr8xt6j_jm0dfw9hC8yicSvCy1cuVxcCRH8pc=w720" alt="Traffic Signal Operator screenshot 5"></a>
+      </div>
+      <div class="meta">App ID: <code>com.tinkusgames.trafficsignaloperator</code> &middot; <a href="traffic-signal-operator/privacy.html">Privacy policy</a></div>
+    </div>
+  </article>
 
-    <article class="card">
-      <span class="chip">Android</span>
-      <h3>Chaat Chaska: Street Food Rush</h3>
-      <p>A fast-paced street food game.</p>
-      <div class="meta">com.tinkusgames.chaatchaska</div>
-      <div class="links"><a href="chaat-chaska/privacy.html">Privacy policy</a></div>
-    </article>
+  <!-- ============ Chaat Chaska ============ -->
+  <article class="game" id="chaat-chaska">
+    <img class="banner" loading="lazy" src="https://lh3.googleusercontent.com/5_qSN2D4hWI_qu_GdiivU31yS3y70ednvQZjhbx4IGjRzNEzdvAdmiMLtNryBfkgOPvJwrk-FvB_6P17FLmNyg=w1024" alt="Chaat Chaska: Street Food Rush feature graphic">
+    <div class="game-body">
+      <div class="game-head">
+        <img src="https://lh3.googleusercontent.com/4uJ4ZXZlKtdzO0L_8dXWqjc6wJOBdq3qGAvfwTVO9NN-kM1I3ffGaNwFwf1mb_hESm0F3HN4OyMKBX86rvgH=s256" alt="Chaat Chaska icon">
+        <div>
+          <h2>Chaat Chaska: Street Food Rush</h2>
+          <p>Cook and serve Indian street food fast! Tikki, pani puri, chai, jalebi and more.</p>
+        </div>
+      </div>
+      <span class="chip">Android</span><span class="chip">Cooking / Time management</span><span class="chip">Hindi &amp; English</span>
+      <p class="intro">Welcome to Pandu's Kitchen, the busiest chaat stall in India! Customers line up hungry and each one shows exactly what they want on their order ticket. Cook it, add exactly the toppings they asked for, and serve it before they lose patience.</p>
+      <h3>Features</h3>
+      <ul class="features">
+        <li>Real Indian street food: aloo tikki chaat, samosa, jalebi, pani puri, dahi bhalla, chole bhature, masala chai, lassi, jaljeera, nimbu shikanji and gulab sharbat.</li>
+        <li>Toppings that grow with you: imli, dahi, sev, onion, chaat masala and more unlock as you play.</li>
+        <li>Travel across India: Chandni Chowk in Delhi, the ghats of Banaras and an Amritsar dhaba. Mumbai and Lucknow / Jaipur are coming soon.</li>
+        <li>45 levels, each with its own goal, plus festival rush levels like Diwali Rush.</li>
+        <li>Upgrade the stall: bigger tawa, more plates, faster chulha, more patient customers.</li>
+        <li>Fun customers: students, office babus, aunty ji, uncle ji, food vloggers, tourists and the VIP neta.</li>
+        <li>Daily rewards, boosters and achievements.</li>
+      </ul>
+      <h3>Screenshots</h3>
+      <div class="shots port">
+        <a href="https://lh3.googleusercontent.com/aR44UiHv3G0RFKF7oNLklpe2lmP9eo3qQ8Hcytcw4BacUUvdPvMbAXLClD7JXlyU2QKmWPDyqTwXPAs29Uto=h1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/aR44UiHv3G0RFKF7oNLklpe2lmP9eo3qQ8Hcytcw4BacUUvdPvMbAXLClD7JXlyU2QKmWPDyqTwXPAs29Uto=h720" alt="Chaat Chaska screenshot 1"></a>
+        <a href="https://lh3.googleusercontent.com/skGzeS4ooM5AX6Hot2TMC7gkXu5F-QYeZNMIWPE3S1NiBm4j8KelesOcJDr9YQhn-LRlXUUgcBdUsO5qAVH3fw=h1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/skGzeS4ooM5AX6Hot2TMC7gkXu5F-QYeZNMIWPE3S1NiBm4j8KelesOcJDr9YQhn-LRlXUUgcBdUsO5qAVH3fw=h720" alt="Chaat Chaska screenshot 2"></a>
+        <a href="https://lh3.googleusercontent.com/jUWoZ79Tx-_1CXEP1JeZJqYJoVZ_VhGsv9RwBs7Nu0TEJObBnHVqZRDbVEcZx9aCrLE04RV3Rmg_AieRbLbyzw=h1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/jUWoZ79Tx-_1CXEP1JeZJqYJoVZ_VhGsv9RwBs7Nu0TEJObBnHVqZRDbVEcZx9aCrLE04RV3Rmg_AieRbLbyzw=h720" alt="Chaat Chaska screenshot 3"></a>
+        <a href="https://lh3.googleusercontent.com/l9X5izeWDuPDywYSnCO6QwwqKEsupAdUlGuG78OtZ57BJ_LG8eRDnhdcEwZenP6wJQjdTHYe_QcEiO2p_B-Zgw=h1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/l9X5izeWDuPDywYSnCO6QwwqKEsupAdUlGuG78OtZ57BJ_LG8eRDnhdcEwZenP6wJQjdTHYe_QcEiO2p_B-Zgw=h720" alt="Chaat Chaska screenshot 4"></a>
+        <a href="https://lh3.googleusercontent.com/O6tzILmQ1WwdMW5J809PHXK605KYO1im1iee2z1ONU-Ka1dEcotYtDetJmLQc6gOT9HxrhpemzYNHc8BXp7T=h1920" target="_blank" rel="noopener"><img loading="lazy" src="https://lh3.googleusercontent.com/O6tzILmQ1WwdMW5J809PHXK605KYO1im1iee2z1ONU-Ka1dEcotYtDetJmLQc6gOT9HxrhpemzYNHc8BXp7T=h720" alt="Chaat Chaska screenshot 5"></a>
+      </div>
+      <div class="meta">App ID: <code>com.tinkusgames.chaatchaska</code> &middot; <a href="chaat-chaska/privacy.html">Privacy policy</a></div>
+    </div>
+  </article>
 
-  </div>
-
-  <h2>Contact</h2>
-  <section class="contact">
+  <h2 style="font-size:1.2rem;margin:40px 0 12px">Contact</h2>
+  <section class="panel">
     <p>For support, feedback or business enquiries, write to us at
       <a href="mailto:tinkusgamedeveloper@gmail.com">tinkusgamedeveloper@gmail.com</a>.</p>
   </section>
