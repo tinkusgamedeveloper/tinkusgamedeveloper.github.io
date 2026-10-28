@@ -10,5 +10,6 @@ Fun, satirical games for Android.
 - **Tilchatta Chalo: Dilli Darbar**: [Privacy policy](tilchatta-chalo/privacy.html)
 - **Air Traffic Controller Job**: run a busy airport tower. [Privacy policy](air-traffic-controller-job/privacy.html)
 - **Traffic Signal Operator**: run the traffic lights of a busy little town. [Privacy policy](traffic-signal-operator/privacy.html)
+- **Chaat Chaska: Street Food Rush** – [Privacy policy](chaat-chaska/privacy.html)
 
 Contact: tinkusgamedeveloper@gmail.com
