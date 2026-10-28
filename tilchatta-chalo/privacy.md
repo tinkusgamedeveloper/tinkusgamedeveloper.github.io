@@ -4,7 +4,7 @@ title: Tilchatta Chalo – Privacy Policy
 
 # Privacy Policy: Tilchatta Chalo
 
-*Last updated: 28 October 2026 · App: Tilchatta Chalo: Dilli Darbar (com.tilchatta.chalo)*
+*Last updated: 28 October 2026 · App: Tilchatta Chalo: Dilli Darbar (com.tinkusgames.tilchattachalo)*
 
 Tilchatta Chalo ("the app") is a game made by Tinku's Games ("we", "us"). In short: **we do not collect your personal information**. The only data that leaves your device is what Google's advertising service needs in order to show ads.
 
